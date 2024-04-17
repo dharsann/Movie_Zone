@@ -1,39 +1,38 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
   const navigate = useNavigate();
 
+  // Storing the token in localStorage after successful login
   const handleLogin = async () => {
-    setIsLoading(true); // Set loading state to true when login process starts
     try {
-      const response = await fetch("http://localhost:5000/api/signin", {
-        method: "POST",
+      const response = await fetch('http://localhost:5000/api/signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password })
       });
 
       const data = await response.json();
 
       if (response.ok) {
+        // Set token in localStorage
         localStorage.setItem("token", data.token);
-        localStorage.setItem("isLoggedIn", "true");
-        onLogin();
-        navigate("/trending");
+        localStorage.setItem("isLoggedIn", "true"); // Set isLoggedIn flag
+
+        onLogin(); // Call the onLogin callback function passed from App
+        navigate('/trending'); // Redirect to trending page
       } else {
-        setError(data.msg || "Invalid username or password");
+        setError(data.msg || 'Invalid username or password');
       }
     } catch (error) {
-      console.error("Login error:", error);
-      setError("An error occurred during login");
-    } finally {
-      setIsLoading(false); // Set loading state back to false when login process finishes
+      console.error('Login error:', error);
+      setError('An error occurred during login');
     }
   };
 
@@ -58,9 +57,8 @@ const Login = ({ onLogin }) => {
             className="form-control"
           />
           <br />
-          {/* Disable the button when loading */}
-          <button onClick={handleLogin} className="btn btn-primary" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
+          <button onClick={handleLogin} className="btn btn-primary">
+            Login
           </button>
           {error && <div className="text-danger">{error}</div>}
           <br />
