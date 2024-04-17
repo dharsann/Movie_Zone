@@ -1,17 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import Trending from "./Pages/Trending";
-import Movies from "./Pages/Movies";
-import TV from "./Pages/TV";
-import Search from "./Pages/Search";
-import Error from "./Pages/Error";
-import Login from "./Pages/Login";
-import Signup from "./Pages/Signup";
+import Header from "../src/Components/Header";
+import Footer from "../src/Components/Footer";
+import Trending from "../src/Pages/Trending";
+import Movies from "../src/Pages/Movies";
+import TV from "../src/Pages/TV";
+import Search from "../src/Pages/Search";
+import Error from "../src/Pages/Error";
+import Login from "../src/Pages/Login";
+import Signup from "../src/Pages/Signup";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Listen for changes to isLoggedIn flag in localStorage
+    const handleStorageChange = () => {
+      const loggedIn = localStorage.getItem("isLoggedIn");
+      setIsLoggedIn(loggedIn === "true");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // Initialize isLoggedIn state based on localStorage
+    handleStorageChange();
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
