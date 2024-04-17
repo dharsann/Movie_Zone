@@ -1,10 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 const connectToDatabase = require('./db/connectToDatabase');
 const fs = require('fs');
+const winston = require('winston');
+const WebSocket = require('ws'); // Import WebSocket module
 require('dotenv').config();
 
 const app = express();
@@ -15,30 +17,30 @@ const morgan = require('morgan');
 const morganMiddleware = morgan(
   ':method :url :status :res[content-length] - :response-time ms',
   {
-     stream: {
-       write: (message) => logger.info(message.trim()),
-     },
+    stream: {
+      write: (message) => logger.info(message.trim()),
+    },
   }
- );
- const winston = require('winston');
+);
 
- const logger = winston.createLogger({
+const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
-     new winston.transports.File({ filename: 'error.log', level: 'error' }),
-     new winston.transports.File({ filename: 'combined.log' }),
-     new winston.transports.File({ filename: 'user-activity.log' }), // Add user activity log file
+    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'combined.log' }),
+    new winston.transports.File({ filename: 'user-activity.log' }),
   ],
- });
- 
- if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-     format: winston.format.simple(),
-  }));
- }
+});
 
-// Function to append to log file
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.simple(),
+    })
+  );
+}
+
 function appendToLog(logPath, data) {
   fs.appendFile(logPath, data + '\n', (err) => {
     if (err) {
@@ -47,23 +49,42 @@ function appendToLog(logPath, data) {
   });
 }
 
-// Use morgan middleware for logging HTTP requests
 app.use(morganMiddleware);
 
 const sessionSecret = process.env.SESSION_SECRET;
-app.use(session({
- secret: sessionSecret,
- resave: false,
- saveUninitialized: true,
- cookie: {
+const sessionMiddleware = session({
+  secret: sessionSecret,
+  resave: false,
+  saveUninitialized: false,
+  store: new MemoryStore({
+    checkPeriod: 86400000,
+  }),
+  cookie: {
     secure: false,
     httpOnly: true,
     maxAge: 3600000,
- }
-}));
+  },
+});
+app.use(sessionMiddleware);
 
-// Your existing endpoints...
-// In your signup endpoint
+// WebSocket server setup
+const wss = new WebSocket.Server({ noServer: true });
+
+// Handle WebSocket connections
+wss.on('connection', (ws) => {
+  // Send message to connected clients when session is updated
+  sessionMiddleware(ws.upgradeReq, {}, () => {
+    ws.on('message', (message) => {
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    });
+  });
+});
+
+// Signup endpoint
 app.post('/api/signup', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -97,7 +118,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// In your signin endpoint
+// Signin endpoint
 app.post('/api/signin', async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -138,26 +159,30 @@ app.post('/api/signin', async (req, res) => {
   }
 });
 
+// Logout endpoint
 app.post('/api/logout', (req, res) => {
   try {
-    // Log the logout action
     logger.info('User logged out');
-
-    // Invalidate the session
-    req.session.destroy(err => {
+    const sessionId = req.session.id;
+    req.session.destroy((err) => {
       if (err) {
         logger.error('Error logging out:', err);
         return res.status(500).json({ message: 'Error logging out' });
       }
       res.status(200).json({ message: 'Logged out successfully' });
-
-      // Log user activity
       const logData = {
         action: 'logout',
-        username: req.session.user.username,
+        session_id: sessionId,
         timestamp: new Date().toISOString(),
       };
       appendToLog('user-activity.log', JSON.stringify(logData));
+
+      // Notify WebSocket clients about logout
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(JSON.stringify({ action: 'logout', session_id: sessionId }));
+        }
+      });
     });
   } catch (error) {
     logger.error('Error logging out:', error);
@@ -165,9 +190,15 @@ app.post('/api/logout', (req, res) => {
   }
 });
 
-
 // Start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
- logger.info(`Server running on port ${PORT}`);
+const server = app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+});
+
+// Attach WebSocket server to existing HTTP server
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit('connection', ws, request);
+  });
 });
