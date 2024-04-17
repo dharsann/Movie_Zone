@@ -7,9 +7,11 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
   const navigate = useNavigate();
 
   const handleSignup = async () => {
+    setIsLoading(true); // Set loading state to true when signup process starts
     try {
       if (password !== confirmPassword) {
         throw new Error("Passwords do not match");
@@ -31,6 +33,8 @@ const Signup = () => {
       setIsRegistered(true);
     } catch (error) {
       setError(error.message || "An error occurred during signup");
+    } finally {
+      setIsLoading(false); // Set loading state back to false when signup process finishes
     }
   };
 
@@ -71,8 +75,9 @@ const Signup = () => {
               className="form-control"
             />
             <br />
-            <button onClick={handleSignup} className="btn btn-primary">
-              Sign Up
+            {/* Disable the button when loading */}
+            <button onClick={handleSignup} className="btn btn-primary" disabled={isLoading}>
+              {isLoading ? "Signing up..." : "Sign Up"}
             </button>
             {error && <div className="text-danger">{error}</div>}
             <br />
