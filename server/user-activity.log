@@ -1,0 +1,32 @@
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 1953.639 ms"}
+{"action":"signin","username":"example","timestamp":"2024-04-17T09:25:41.077Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 5969.479 ms"}
+{"action":"signin","username":"example","timestamp":"2024-04-17T09:26:10.349Z"}
+{"level":"error","message":"Server Error"}
+{"level":"info","message":"POST /api/signin 500 24 - 278.838 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 5522.813 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:26:48.402Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 4530.481 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:30:32.044Z"}
+{"level":"info","message":"User logged out"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 5710.029 ms"}
+{"action":"signin","username":"example","timestamp":"2024-04-17T09:38:39.866Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 5381.252 ms"}
+{"action":"signin","username":"example","timestamp":"2024-04-17T09:39:30.873Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 4629.997 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:40:22.615Z"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 6068.247 ms"}
+{"action":"signin","username":"example","timestamp":"2024-04-17T09:46:55.701Z"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 5238.035 ms"}
+{"action":"signin","username":"admin","timestamp":"2024-04-17T09:51:59.062Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 4899.805 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:54:19.080Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 7131.101 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:55:09.236Z"}
+{"level":"info","message":"POST /api/signin 200 30 - 4027.610 ms"}
+{"action":"signin","username":"bhadri","timestamp":"2024-04-17T09:57:45.898Z"}
+{"level":"info","message":"User logged out"}

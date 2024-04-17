@@ -1,0 +1,34 @@
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 2734.019 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4005.373 ms"}
+{"level":"info","message":"POST /api/signin 400 31 - 3992.411 ms"}
+{"level":"info","message":"POST /api/signin 400 31 - 2114.108 ms"}
+{"level":"info","message":"POST /api/signin 400 31 - 3973.016 ms"}
+{"level":"info","message":"POST /api/signin 400 31 - 1506.903 ms"}
+{"level":"info","message":"POST /api/signin 400 31 - 4682.164 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 2780.213 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 3074.989 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 1399.816 ms"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 1953.639 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 5969.479 ms"}
+{"level":"error","message":"Server Error"}
+{"level":"info","message":"POST /api/signin 500 24 - 278.838 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 5522.813 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4530.481 ms"}
+{"level":"info","message":"User logged out"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 5710.029 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 5381.252 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4629.997 ms"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 5039.612 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4277.724 ms"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 6068.247 ms"}
+{"level":"info","message":"Server running on port 5000"}
+{"level":"info","message":"POST /api/signin 200 30 - 5238.035 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4899.805 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 7131.101 ms"}
+{"level":"info","message":"POST /api/signin 200 30 - 4027.610 ms"}
+{"level":"info","message":"User logged out"}
