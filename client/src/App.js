@@ -40,7 +40,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={isLoggedIn ? <Navigate to="/trending" /> : <Login onLogin={handleLogin} />}
+          element={isLoggedIn ? <Navigate to="/trending" /> : <Navigate to="/signin" />}
         />
         <Route path="/signup" element={<Signup />} />
         {isLoggedIn && (
